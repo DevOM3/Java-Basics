@@ -1,0 +1,42 @@
+import java.awt.*;
+
+class SignUpGUI extends Frame{
+	public SignUpAWT() {
+		setLayout(null);
+
+		Label nameLabel = new Label("First Name: ");
+		nameLabel.setPosition(10, 10);
+		add(nameLabel);
+		
+		TextField name = new TextField(21);
+		name.setPosition(30, 10);
+		add(name);
+
+		Label lastNameLabel = new Label("Last Name: ");
+		lastNameLabel.setPosition(10, 40);
+		add(lastNameLabel);
+		
+		TextField name = new TextField(21);
+		name.setPosition(30, 40);
+		add(name);
+
+		Label addressLabel = new Label("Address: ");
+		addressLabel.setPosition(10, 70);
+		add(addressLabel);
+
+		TextArea address = new TextArea();
+		address.setPosition(30, 70);
+		add(address);
+
+		Button submit = new Button("Submit");
+		submit.setPosition(10, 120);
+		add(submit);
+	}
+}
+
+public class SignUpAWT{
+	public static void main(String []args){
+		SignUpGUI signUpGUI = new SignUpGUI();
+	}
+}
+

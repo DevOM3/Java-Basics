@@ -1,0 +1,207 @@
+import java.awt.*;
+import java.awt.event.*;
+
+class Event4 extends Frame implements ActionListener {
+TextArea textArea;
+int fontPlain = 0;
+int fontBold = 1;
+int fontItalic = 2;
+int currentFont = 0;
+int fontSize = 18;
+String text;
+int fontR = 0;
+int fontG = 0;
+int fontB = 0;
+int backR = 255;
+int backG = 255;
+int backB = 255;
+
+Event4(){
+	MenuBar mb = new MenuBar();
+	
+	Menu textMenu = new Menu("Text");
+	Menu fontMenu = new Menu("Font");
+	Menu colorMenu = new Menu("Color");
+	Menu editMenu = new Menu("Edit");
+
+	MenuItem clear = new MenuItem("Clear");
+	clear.addActionListener(this);
+	MenuItem upperCase = new MenuItem("UpperCase");	
+	upperCase.addActionListener(this);
+	MenuItem lowerCase = new MenuItem("LowerCase");
+	lowerCase.addActionListener(this);
+	textMenu.add(clear);
+	textMenu.add(upperCase);
+	textMenu.add(lowerCase);
+	
+
+	MenuItem bold = new MenuItem("BOLD");
+	bold.addActionListener(this);
+	MenuItem italic = new MenuItem("ITALIC");
+	italic.addActionListener(this);
+	MenuItem plain = new MenuItem("PLAIN");
+	plain.addActionListener(this);
+	MenuItem sizep = new MenuItem("SIZE++");
+	sizep.addActionListener(this);
+	MenuItem sizem = new MenuItem("SIZE--");
+	sizem.addActionListener(this);
+	fontMenu.add(bold);
+	fontMenu.add(italic);
+	fontMenu.add(plain);
+	fontMenu.add(sizep);
+	fontMenu.add(sizem);
+
+	MenuItem fontColor = new MenuItem("Font Color");
+	fontColor.addActionListener(this);
+	MenuItem backColor = new MenuItem("Back Color");
+	backColor.addActionListener(this);
+	colorMenu.add(fontColor);
+	colorMenu.add(backColor);
+
+	MenuItem newM = new MenuItem("New");
+	newM.addActionListener(this);	
+	MenuItem cut = new MenuItem("Cut");
+	cut.addActionListener(this);
+	MenuItem copy = new MenuItem("Copy");
+	copy.addActionListener(this);
+	MenuItem paste = new MenuItem("Paste");
+	paste.addActionListener(this);
+	editMenu.add(newM);
+	editMenu.add(cut);
+	editMenu.add(copy);
+	editMenu.add(paste);
+	
+	setSize(500, 500);
+	setVisible(true);
+
+	Font textFont = new Font("Arial", Font.PLAIN, 18);
+	textArea = new TextArea();
+	textArea.setFont(textFont);
+
+	mb.add(textMenu);
+	mb.add(fontMenu);
+	mb.add(colorMenu);
+	mb.add(editMenu);
+	setMenuBar(mb);
+	add(textArea);
+	
+}
+
+public void actionPerformed(ActionEvent ae) {
+	Font textFont;
+	String label = ae.getActionCommand();
+	
+	switch(label){
+		case "Clear": textArea.setText("\0");
+			      break;
+		case "UpperCase": textArea.setText(textArea.getText().toUpperCase());
+				  break;
+		case "LowerCase": textArea.setText(textArea.getText().toLowerCase());
+				  break;
+		case "BOLD": textFont = new Font("Arial", Font.BOLD, fontSize);
+			     currentFont = fontBold;
+			     textArea.setFont(textFont);
+			     break;
+		case "ITALIC": textFont = new Font("Arial", Font.ITALIC, fontSize);
+			       currentFont = fontItalic;
+			       textArea.setFont(textFont);
+			       break;
+		case "PLAIN": textFont = new Font("Arial", Font.PLAIN, fontSize);
+			      currentFont = fontPlain;
+			      textArea.setFont(textFont);
+			      break;
+		case "SIZE++": textFont = new Font("Arial", currentFont, fontSize++);
+			       textArea.setFont(textFont);
+			       break;
+		case "SIZE--": if (fontSize > 1){
+                               	textFont = new Font("Arial", currentFont, fontSize--);
+			       	textArea.setFont(textFont);
+			       	break;
+			       }
+		case "Font Color": ColorPicker forFont = new ColorPicker(fontR, fontG, fontB);
+				   fontR = forFont.getRed();
+				   fontG = forFont.getGreen();
+				   fontB = forFont.getBlue();
+				   textArea.setBackground(new Color(fontR, fontG, fontB));
+			           break;
+		case "Back Color": ColorPicker forBack = new ColorPicker(backR, backG, backB);
+				   backR = forBack.getRed();
+				   backG = forBack.getGreen();
+				   backB = forBack.getBlue();
+				   textArea.setBackground(new Color(backR, backG, backB));
+			           break;
+		case "New": new Event4();
+			    break;
+		case "Cut": text = textArea.getSelectedText();
+			    textArea.setText(textArea.getText().replace(text, ""));
+			    break;
+		case "Copy": text = textArea.getSelectedText();
+			     break;
+		case "Paste": textArea.insert(text, textArea.getCaretPosition());
+			      break; 
+	}
+}
+
+public static void main(String []ar) {
+	new Event4();
+}
+}
+
+class ColorPicker extends Frame {
+	Scrollbar r;
+	Scrollbar g;
+	Scrollbar b;
+	int rc;
+	int gc;
+	int bc;
+
+	ColorPicker(int rv, int gv, int bv) {
+		setSize(300, 300);
+		setVisible(true);
+		setLayout(null);
+
+		r = new Scrollbar(Scrollbar.HORIZONTAL, rv, 1, 0, 256);
+		r.setBackground(Color.red);
+		r.addAdjustmentListener(new AdjustmentListener() {
+			public void adjustmentValueChanged(AdjustmentEvent ae) {
+				rc = r.getValue();
+			}
+		});
+		g = new Scrollbar(Scrollbar.HORIZONTAL, gv, 1, 0, 256);
+		g.setBackground(Color.green);
+		g.addAdjustmentListener(new AdjustmentListener() {
+			public void adjustmentValueChanged(AdjustmentEvent ae) {
+				gc = g.getValue();
+			}
+		});
+		b = new Scrollbar(Scrollbar.HORIZONTAL, bv, 1, 0, 256);
+		b.setBackground(Color.blue);
+		b.addAdjustmentListener(new AdjustmentListener() {
+			public void adjustmentValueChanged(AdjustmentEvent ae) {
+				bc = b.getValue();
+			}
+		});
+		
+		r.setLocation(10, 50);
+		r.setSize(256, 21);
+		g.setLocation(10, 100);
+		g.setSize(256, 21);
+		b.setLocation(10, 150);
+		b.setSize(256, 21);
+
+		add(r);
+		add(g);
+		add(b);
+	}
+	
+	public int getRed() {
+		return rc;
+	}
+	public int getGreen() {
+		return gc;
+	}
+	public int getBlue() {
+		return bc;
+	}
+}
+
